@@ -1,5 +1,4 @@
-import os
-from time import sleep
+
 from random import choice
 import pygame
 from sys import exit
@@ -26,7 +25,6 @@ def evaluate(board, cell, y_axis, x_axis):
             live += 1
         elif neighbor == 'd':
             dead += 1
-    # print(f'Cell: {cell}\nPosition: {y_axis, x_axis}\nLive: {live}\nDead: {dead}\n')
     match cell:
         case 'd':
             if live == 3:
@@ -93,9 +91,12 @@ def input_cells(board, pixel_size, grid):
                     screen.blit(box, box_rect)
                     mouse_pos = pygame.mouse.get_pos()
                     screen.blit(box, (pixel_size * i, pixel_size * j))
-                    if box_rect.collidepoint(mouse_pos) and pygame.mouse.get_pressed()[0]:
-                        cells[int(mouse_pos[1] / pixel_size)][int(mouse_pos[0] / pixel_size)] = ('l', 'd')[cells[int(mouse_pos[1] / pixel_size)][int(mouse_pos[0] / pixel_size)] == 'l']
-                        sleep(0.1)
+                    if box_rect.collidepoint(mouse_pos):
+                        if pygame.mouse.get_pressed()[0]:
+                            cells[int(mouse_pos[1] / pixel_size)][int(mouse_pos[0] / pixel_size)] = 'l'
+                        elif pygame.mouse.get_pressed()[2]:
+                            cells[int(mouse_pos[1] / pixel_size)][int(mouse_pos[0] / pixel_size)] = 'd'
+
             pygame.display.update()
             clock.tick(60)
     except:
@@ -163,7 +164,6 @@ def settings(grid, density, auto, delay, pixel_size):
             break
         if user_input.startswith('setpixel'):
             pixel_size = int(user_input.replace('setpixel ', ''))
-
 
     return grid, density, auto, delay, pixel_size
 
